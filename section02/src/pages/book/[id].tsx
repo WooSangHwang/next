@@ -1,4 +1,10 @@
 import style from "./[id].module.css";
+import {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
+import fetchBook from "@/lib/fetch-book";
 const mockData = {
   id: 1,
   title: "한 입 크기로 잘라 먹는 리액트",
@@ -11,9 +17,24 @@ const mockData = {
     "https://shopping-phinf.pstatic.net/main_3888828/38888282618.20230913071643.jpg",
 };
 
-const Page = () => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const id = context.params!.id;
+
+  const book = await fetchBook(Number(id));
+
+  return {
+    props: { book },
+  };
+};
+
+const Page = ({
+  book,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  if (!book) return "문제가 발생함";
   const { id, title, subTitle, description, author, publisher, coverImgUrl } =
-    mockData;
+    book;
 
   return (
     <div className={style.container}>
