@@ -3,8 +3,10 @@ import {
   GetServerSideProps,
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
+  InferGetStaticPropsType,
 } from "next";
 import fetchBook from "@/lib/fetch-book";
+import { useRouter } from "next/router";
 const mockData = {
   id: 1,
   title: "한 입 크기로 잘라 먹는 리액트",
@@ -17,21 +19,40 @@ const mockData = {
     "https://shopping-phinf.pstatic.net/main_3888828/38888282618.20230913071643.jpg",
 };
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
+export const getStaticPaths = () => {
+  return {
+    paths: [
+      { params: { id: "1" } },
+      { params: { id: "2" } },
+      { params: { id: "3" } },
+    ],
+    fallback: true,
+    //false 404 not found
+    //blocking SSR 방식
+    //true SSR방식 + 데이터가 없는 풀백 상태의 페이지부터 반환
+    // if (router.isFallback)
+  };
+};
+
+export const getStaticProps = async (context: GetServerSidePropsContext) => {
   const id = context.params!.id;
 
   const book = await fetchBook(Number(id));
+
+  if (!book) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: { book },
   };
 };
 
-const Page = ({
-  book,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Page = ({ book }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const router = useRouter();
+  if (router.isFallback) return "로딩중입니다.";
   if (!book) return "문제가 발생함";
   const { id, title, subTitle, description, author, publisher, coverImgUrl } =
     book;
