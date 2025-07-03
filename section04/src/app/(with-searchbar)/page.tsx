@@ -2,6 +2,12 @@ import BookItem from "@/components/book-item";
 import style from "./page.module.css";
 import { BookData } from "@/types";
 
+// auto : 기본값
+// force-dynamic : 페이지를 강제로 dynamic 페이지로 변경
+// force-static : 페이지를 강제로 static 페이지로 변경
+// error
+// export const dynamic = "force-dynamic";
+
 async function AllBooks() {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,
