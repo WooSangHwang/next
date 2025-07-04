@@ -38,7 +38,7 @@ export async function createReviewAction(s_: any, formData: FormData) {
     console.log(error);
     return {
       status: false,
-      error: "리뷰 저장을 실패햇습ㄴ디ㅏ. ",
+      error: "리뷰 저장을 실패했습니다. ",
     };
   }
 }
