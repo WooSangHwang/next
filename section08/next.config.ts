@@ -11,6 +11,15 @@ const nextConfig: NextConfig = {
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-explicit-any": "warn",
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "shopping-phinf.pstatic.net",
+        pathname: "**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
