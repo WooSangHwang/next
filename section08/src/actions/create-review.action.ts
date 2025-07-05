@@ -1,6 +1,5 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { delay } from "@/util/delay";
 
 export async function createReviewAction(s_: any, formData: FormData) {
   const bookId = formData.get("bookId")?.toString();
@@ -15,7 +14,6 @@ export async function createReviewAction(s_: any, formData: FormData) {
   }
 
   try {
-    delay(2000);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/1`,
       {
@@ -28,7 +26,6 @@ export async function createReviewAction(s_: any, formData: FormData) {
       throw new Error(response.statusText);
     }
 
-    console.log(response.status);
     revalidatePath(`/book/${bookId}`);
     return {
       status: true,
